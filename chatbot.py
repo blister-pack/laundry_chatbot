@@ -15,4 +15,7 @@ MY_PHONE_NUMBER = os.getenv("MY_PHONE_NUMBER")
 
 @app.get("/")
 def index():
-    return {"today is": today()}, {"tomorrow is": tomorrow()}
+    return (
+        {"today is": today()},
+        {"tomorrow is": tomorrow()},
+    )
