@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Path
 from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
+from thirdfriday import *
 import os
 
 load_dotenv()
@@ -14,4 +15,4 @@ MY_PHONE_NUMBER = os.getenv("MY_PHONE_NUMBER")
 
 @app.get("/")
 def index():
-    return {"hello":"world"}
+    return {"today is": today()}, {"tomorrow is": tomorrow()}
