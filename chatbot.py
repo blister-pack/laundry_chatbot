@@ -1,19 +1,37 @@
+from urllib import response
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from thirdfriday import *
 import os
+import requests
 
 load_dotenv()
 app = FastAPI()
 
-account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+ac_phone_number = os.getenv("AC_PHONE_NUMBER")
+ac_api_key = os.getenv("AC_API_KEY")
+am_phone_number = os.getenv("AM_PHONE_NUMBER")
+am_api_key = os.getenv("AM_API_KEY")
+ms_phone_number = os.getenv("MS_PHONE_NUMBER")
+ms_api_key = os.getenv("MS_API_KEY")
 
-twilio_phone_number = os.getenv("TWILIO_PHONE_NUMBER")
-my_phone_number = os.getenv("MY_PHONE_NUMBER")
+
+def send_message(phone_number, api_key):
+    message = f"Hello World"
+
+    url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print(f"Sent message to {phone_number}")
+    else:
+        print(
+            f"Failed to send message to {phone_number}. Status code: {response.status_code}"
+        )
 
 
+send_message(ac_phone_number, ac_api_key)
 
 
 @app.get("/")
