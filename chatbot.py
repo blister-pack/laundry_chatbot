@@ -1,17 +1,21 @@
 from fastapi import FastAPI, Path
 from twilio.twiml.messaging_response import MessagingResponse
+from twilio.rest import Client
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from thirdfriday import *
 import os
 
 load_dotenv()
-
 app = FastAPI()
 
-TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
-TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
-MY_PHONE_NUMBER = os.getenv("MY_PHONE_NUMBER")
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+client = Client(account_sid, auth_token)
+
+twilio_phone_number = os.getenv("TWILIO_PHONE_NUMBER")
+my_phone_number = os.getenv("MY_PHONE_NUMBER")
+
 
 @app.get("/")
 def index():
