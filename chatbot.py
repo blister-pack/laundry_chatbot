@@ -16,6 +16,12 @@ am_api_key = os.getenv("AM_API_KEY")
 ms_phone_number = os.getenv("MS_PHONE_NUMBER")
 ms_api_key = os.getenv("MS_API_KEY")
 
+people_to_message = {
+    ac_phone_number: ac_api_key,
+    am_phone_number: am_api_key,
+    ms_phone_number: ms_api_key,
+}
+
 
 def send_message(phone_number, api_key):
     message = f"Hello World"
@@ -31,7 +37,9 @@ def send_message(phone_number, api_key):
         )
 
 
-send_message(ac_phone_number, ac_api_key)
+for person in people_to_message:
+    send_message(person, people_to_message[person])
+# send_message(ac_phone_number, ac_api_key)
 
 
 @app.get("/")
