@@ -22,6 +22,14 @@ people_to_message = {
     ms_phone_number: ms_api_key,
 }
 
+messages_to_send = {
+    "monday": "This friday no laundry should be left hanging! Consider drying your clothes today and not later in the week!",
+    "tuesday": "Getting close to Friday! Maybe you can still put some clothes to dry.",
+    "wednesday": "It's already Wednesday, consider not washing any clothes today.",
+    "thursday": "Tomorrow is Friday! Did you leave any clothes downstairs?",
+    "friday": "Today is the day! Get your clothes from downstairs if you haven't already!",
+}
+
 
 def send_message(phone_number, api_key):
     message = f"Hello World"
