@@ -55,9 +55,9 @@ def message_everyone():
     """the function is ran every day, first it checks if
     it's the right week to send messages, if it is then
     the messages are sent to all members"""
-
-    for person in people_to_message:
-        send_message(person, people_to_message[person])
+    if is_right_week() == True:
+        for person in people_to_message:
+            send_message(person, people_to_message[person])
     # send_message(ac_phone_number, ac_api_key)
 
 
