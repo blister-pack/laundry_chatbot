@@ -1,3 +1,4 @@
+from ast import If
 from email import message
 from urllib import response
 from fastapi import FastAPI, Path
@@ -34,6 +35,7 @@ messages_to_send = {
 
 all_third_fridays = get_all_third_fridays()
 
+
 def send_message(phone_number, api_key):
     # message = messages_to_send[today()]
     message = "schedule attempt 1"
@@ -50,9 +52,14 @@ def send_message(phone_number, api_key):
 
 
 def message_everyone():
+    """the function is ran every day, first it checks if
+    it's the right week to send messages, if it is then
+    the messages are sent to all members"""
+
     for person in people_to_message:
         send_message(person, people_to_message[person])
     # send_message(ac_phone_number, ac_api_key)
+
 
 print(all_third_fridays)
 

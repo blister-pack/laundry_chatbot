@@ -27,7 +27,6 @@ month_mapping = {
 all_third_fridays = {"month": "day"}
 
 
-
 # this function returns what day of the week is today
 def today():
     day_today = datetime.now().weekday()
@@ -52,10 +51,27 @@ def get_all_third_fridays():
     current_year = datetime.now().year
 
     for month in range(1, 13):
+        """we use formatted date to remove the timestamp"""
         third_friday = get_third_friday(current_year, month)
-        all_third_fridays[f"{month_mapping[month]}"]= f"{third_friday}"
+        formatted_date = third_friday.strftime("%Y-%m-%d")
+        all_third_fridays[f"{month_mapping[month]}"] = f"{formatted_date}"
 
     return all_third_fridays
+
+
+def is_right_week():
+    this_month = month_mapping[datetime.now().month]
+    # title because data is saved with a capitalized month
+    # only need 2 last chars because it's the day (2024-02-16)
+    # gotta turn it into an int so I can do math with it
+    sixth_friday_of_the_month = int(all_third_fridays[this_month.title][-2::])
+
+    """if the difference between the now and the third friday of
+    the month is 4 then it is monday of the same week, if it's 0
+    then it is friday!"""
+    if 0 <= sixth_friday_of_the_month - datetime.now().day <= 4:
+        return True
+    return False
 
 
 if __name__ == "__main__":
@@ -63,4 +79,5 @@ if __name__ == "__main__":
     print(tomorrow())
     print(get_third_friday(2024, 11))
     print(get_all_third_fridays())
-    print(all_third_fridays[1]["January"])
+    print(all_third_fridays["January"])
+    print(int(all_third_fridays["january".title()][-2::]))
