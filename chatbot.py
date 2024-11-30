@@ -1,6 +1,6 @@
 from urllib import response
 from fastapi import FastAPI, Path
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 from dotenv import load_dotenv
 from thirdfriday import *
 import os
@@ -32,7 +32,7 @@ messages_to_send = {
 
 
 def send_message(phone_number, api_key):
-    message = f"Hello World"
+    message = messages_to_send[today()]
 
     url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
     response = requests.get(url)
