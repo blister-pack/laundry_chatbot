@@ -1,6 +1,3 @@
-from ast import If
-from email import message
-from urllib import response
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -37,8 +34,7 @@ all_third_fridays = get_all_third_fridays()
 
 
 def send_message(phone_number, api_key):
-    # message = messages_to_send[today()]
-    message = "schedule attempt 1"
+    message = messages_to_send[today()]
 
     url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
     response = requests.get(url)
@@ -73,6 +69,15 @@ scheduler.add_job(
 )
 scheduler.start()
 # ------------------------------------- #
+# ------       ENDPOINTS         ------ #
+
+
+
+
+
+# ------------------------------------- #
+
+
 
 
 @app.get("/")
