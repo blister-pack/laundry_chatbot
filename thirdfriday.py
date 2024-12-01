@@ -75,6 +75,7 @@ def is_right_week(month_to_check=datetime.now().month, current_day=datetime.now(
     return False
 
 
+
 if __name__ == "__main__":
     print(today())
     print(tomorrow())
