@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Path
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from thirdfriday import *
@@ -59,7 +59,7 @@ def message_everyone():
 print(all_third_fridays)
 
 # ------ LOGIC FOR THE SCHEDULER ------ #
-scheduler = BlockingScheduler()
+scheduler = BackgroundScheduler()
 scheduler.add_job(
     func=message_everyone,
     trigger=CronTrigger(hour=8, minute=0),
