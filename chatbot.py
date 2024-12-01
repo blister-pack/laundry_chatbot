@@ -1,6 +1,6 @@
-from urllib import response
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from thirdfriday import *
 import os
@@ -30,6 +30,8 @@ messages_to_send = {
     "friday": "Today is the day! Get your clothes from downstairs if you haven't already!",
 }
 
+all_third_fridays = get_all_third_fridays()
+
 
 def send_message(phone_number, api_key):
     message = messages_to_send[today()]
@@ -45,9 +47,37 @@ def send_message(phone_number, api_key):
         )
 
 
-for person in people_to_message:
-    send_message(person, people_to_message[person])
-# send_message(ac_phone_number, ac_api_key)
+def message_everyone():
+    """the function is ran every day, first it checks if
+    it's the right week to send messages, if it is then
+    the messages are sent to all members"""
+    if is_right_week():
+        for person in people_to_message:
+            send_message(person, people_to_message[person])
+
+
+print(all_third_fridays)
+
+# ------ LOGIC FOR THE SCHEDULER ------ #
+scheduler = BlockingScheduler()
+scheduler.add_job(
+    func=message_everyone,
+    trigger=CronTrigger(hour=8, minute=0),
+    id="laundry_reminder",
+    name="Remind everyone about laundry",
+    replace_existing=True,
+)
+scheduler.start()
+# ------------------------------------- #
+# ------       ENDPOINTS         ------ #
+
+
+
+
+
+# ------------------------------------- #
+
+
 
 
 @app.get("/")
