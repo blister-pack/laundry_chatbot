@@ -34,7 +34,8 @@ all_third_fridays = get_all_third_fridays()
 
 
 def send_message(phone_number, api_key):
-    message = messages_to_send[today()]
+    # message = messages_to_send[today()]
+    message = "hi lol"
 
     url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
     response = requests.get(url)
@@ -56,6 +57,10 @@ def message_everyone():
             send_message(person, people_to_message[person])
 
 
+def message_everyone_test():
+    for person in people_to_message:
+        send_message(person, people_to_message[person])
+
 print(all_third_fridays)
 
 # ------ LOGIC FOR THE SCHEDULER ------ #
@@ -69,16 +74,6 @@ scheduler.add_job(
 )
 scheduler.start()
 # ------------------------------------- #
-# ------       ENDPOINTS         ------ #
-
-
-
-
-
-# ------------------------------------- #
-
-
-
 
 @app.get("/")
 def index():
