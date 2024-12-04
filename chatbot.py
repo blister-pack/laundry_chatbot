@@ -34,8 +34,7 @@ all_third_fridays = get_all_third_fridays()
 
 
 def send_message(phone_number, api_key):
-    # message = messages_to_send[today()]
-    message = "hi lol"
+    message = messages_to_send[today()]
 
     url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
     response = requests.get(url)
@@ -47,6 +46,18 @@ def send_message(phone_number, api_key):
             f"Failed to send message to {phone_number}. Status code: {response.status_code}"
         )
 
+def message_start_service(phone_number=ac_phone_number, api_key=ac_api_key):
+    message = "Scheduler started! Messages will be sent when the time is right :)"
+
+    url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print(f"Sent message to {phone_number}")
+    else:
+        print(
+            f"Failed to send message to {phone_number}. Status code: {response.status_code}"
+        )
 
 def message_everyone():
     """the function is ran every day, first it checks if
@@ -74,6 +85,7 @@ scheduler.add_job(
 )
 scheduler.start()
 # ------------------------------------- #
+message_start_service()
 
 @app.get("/")
 def index():
