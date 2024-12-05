@@ -77,7 +77,7 @@ def message_everyone_test():
 
 
 def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
-    message = "Scheduler started! Messages will be sent when the time is right :)"
+    message = "This message is sent every minute"
 
     url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
     response = requests.get(url)
@@ -102,7 +102,7 @@ scheduler.add_job(
     replace_existing=True,
 )
 scheduler.add_job(
-    func=None,
+    func=message_dev,
     trigger=IntervalTrigger(minutes=1),
     id="message_ac",
     name="Messages dev to make sure it's running correctly upon deployment :)",
