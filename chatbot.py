@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -8,7 +9,38 @@ import os
 import requests
 
 load_dotenv()
-app = FastAPI()
+scheduler = BackgroundScheduler()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    message_start_service()
+
+    scheduler.add_job(
+        func=message_everyone,
+        trigger=CronTrigger(hour=8, minute=0),
+        id="laundry_reminder",
+        name="Remind everyone about laundry",
+        replace_existing=True,
+    )
+
+    scheduler.add_job(
+        func=message_dev,
+        trigger=IntervalTrigger(minutes=1),
+        id="message_ac",
+        name="Messages dev to make sure it's running correctly upon deployment :)",
+        replace_existing=True,
+    )
+
+    scheduler.start()
+
+    yield
+
+    scheduler.shutdown()
+
+
+app = FastAPI(lifespan=lifespan)
 
 ac_phone_number = os.getenv("AC_PHONE_NUMBER")
 ac_api_key = os.getenv("AC_API_KEY")
@@ -91,31 +123,3 @@ def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
 
 
 print(all_third_fridays)
-
-# ------ LOGIC FOR THE SCHEDULER ------ #
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    func=message_everyone,
-    trigger=CronTrigger(hour=8, minute=0),
-    id="laundry_reminder",
-    name="Remind everyone about laundry",
-    replace_existing=True,
-)
-scheduler.add_job(
-    func=message_dev,
-    trigger=IntervalTrigger(minutes=1),
-    id="message_ac",
-    name="Messages dev to make sure it's running correctly upon deployment :)",
-    replace_existing=True,
-)
-scheduler.start()
-# ------------------------------------- #
-message_start_service()
-
-
-@app.get("/")
-def index():
-    return (
-        {"today is": today()},
-        {"tomorrow is": tomorrow()},
-    )
