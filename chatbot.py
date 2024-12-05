@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from dotenv import load_dotenv
 from thirdfriday import *
 import os
@@ -46,6 +47,7 @@ def send_message(phone_number, api_key):
             f"Failed to send message to {phone_number}. Status code: {response.status_code}"
         )
 
+
 def message_start_service(phone_number=ac_phone_number, api_key=ac_api_key):
     message = "Scheduler started! Messages will be sent when the time is right :)"
 
@@ -58,6 +60,7 @@ def message_start_service(phone_number=ac_phone_number, api_key=ac_api_key):
         print(
             f"Failed to send message to {phone_number}. Status code: {response.status_code}"
         )
+
 
 def message_everyone():
     """the function is ran every day, first it checks if
@@ -72,6 +75,21 @@ def message_everyone_test():
     for person in people_to_message:
         send_message(person, people_to_message[person])
 
+
+def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
+    message = "Scheduler started! Messages will be sent when the time is right :)"
+
+    url = f"https://api.callmebot.com/whatsapp.php?phone={phone_number}&text={message}&apikey={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        print(f"Sent message to {phone_number}")
+    else:
+        print(
+            f"Failed to send message to {phone_number}. Status code: {response.status_code}"
+        )
+
+
 print(all_third_fridays)
 
 # ------ LOGIC FOR THE SCHEDULER ------ #
@@ -83,9 +101,17 @@ scheduler.add_job(
     name="Remind everyone about laundry",
     replace_existing=True,
 )
+scheduler.add_job(
+    func=None,
+    trigger=IntervalTrigger(minutes=1),
+    id="message_ac",
+    name="Messages dev to make sure it's running correctly upon deployment :)",
+    replace_existing=True,
+)
 scheduler.start()
 # ------------------------------------- #
 message_start_service()
+
 
 @app.get("/")
 def index():
