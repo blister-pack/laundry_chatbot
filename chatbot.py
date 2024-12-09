@@ -34,13 +34,13 @@ async def lifespan(app: FastAPI):
         replace_existing=True,
     )
 
-    scheduler.add_job(
-        func=self_ping,
-        trigger=IntervalTrigger(minutes=5),
-        id="self_ping",
-        name="Keeps app awake in Render's free tier",
-        replace_existing=True,
-    )
+    # scheduler.add_job(
+    #     func=self_ping,
+    #     trigger=IntervalTrigger(minutes=5),
+    #     id="self_ping",
+    #     name="Keeps app awake in Render's free tier",
+    #     replace_existing=True,
+    # )
 
     scheduler.start()
 
@@ -99,7 +99,7 @@ def message_start_service(phone_number=ac_phone_number, api_key=ac_api_key):
         print(f"Sent message to {phone_number}")
     else:
         print(
-            f"Failed to send message to {phone_number}. Status code: {response.status_code}"
+            f"Failed to send message to {phone_number}. Status code: {response.status_code} - {response.text}"
         )
 
 
@@ -127,7 +127,7 @@ def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
         print(f"Sent message to {phone_number}")
     else:
         print(
-            f"Failed to send message to {phone_number}. Status code: {response.status_code}"
+            f"Failed to send message to {phone_number}. Status code: {response.status_code} - {response.text}"
         )
 
 
@@ -140,9 +140,9 @@ async def ping():
     return {"status": "alive", "message": "Chatbot is running"}
 
 
-def self_ping():
-    try:
-        response = requests.get(f"{os.getenv("APP_URL")}/ping")
-        print(f"Self-ping status: {response.status_code}")
-    except Exception as e:
-        print(f"Self-ping failed: {str(e)}")
+# def self_ping():
+#     try:
+#         response = requests.get(f"{os.getenv("APP_URL")}/ping")
+#         print(f"Self-ping status: {response.status_code}")
+#     except Exception as e:
+#         print(f"Self-ping failed: {str(e)}")
