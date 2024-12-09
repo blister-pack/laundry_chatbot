@@ -26,21 +26,21 @@ async def lifespan(app: FastAPI):
         replace_existing=True,
     )
 
-    scheduler.add_job(
-        func=message_dev,
-        trigger=IntervalTrigger(minutes=1),
-        id="message_ac",
-        name="Messages dev to make sure it's running correctly upon deployment :)",
-        replace_existing=True,
-    )
-
     # scheduler.add_job(
-    #     func=self_ping,
-    #     trigger=IntervalTrigger(minutes=5),
-    #     id="self_ping",
-    #     name="Keeps app awake in Render's free tier",
+    #     func=message_dev,
+    #     trigger=IntervalTrigger(minutes=1),
+    #     id="message_ac",
+    #     name="Messages dev to make sure it's running correctly upon deployment :)",
     #     replace_existing=True,
     # )
+
+    scheduler.add_job(
+        func=self_ping,
+        trigger=IntervalTrigger(minutes=5),
+        id="self_ping",
+        name="Keeps app awake in Render's free tier",
+        replace_existing=True,
+    )
 
     scheduler.start()
 
@@ -140,9 +140,9 @@ async def ping():
     return {"status": "alive", "message": "Chatbot is running"}
 
 
-# def self_ping():
-#     try:
-#         response = requests.get(f"{os.getenv("APP_URL")}/ping")
-#         print(f"Self-ping status: {response.status_code}")
-#     except Exception as e:
-#         print(f"Self-ping failed: {str(e)}")
+def self_ping():
+    try:
+        response = requests.get(f"{os.getenv("APP_URL")}/ping")
+        print(f"Self-ping status: {response.status_code}")
+    except Exception as e:
+        print(f"Self-ping failed: {str(e)}")
