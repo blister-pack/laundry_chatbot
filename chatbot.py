@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from urllib import response
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -123,3 +124,15 @@ def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
 
 
 print(all_third_fridays)
+
+
+@app.get("/ping")
+async def ping():
+    return {"status": "alive", "message": "Chatbot is running"}
+
+def self_ping():
+    try:
+        response = requests.get(f"{os.getenv("APP_URL")}/ping")
+        print(f"Self-ping status: {response.status_code}")
+    except Exception as e:
+        print(f"Self-ping failed: {str(e)}")
