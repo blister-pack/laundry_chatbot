@@ -142,7 +142,7 @@ async def ping():
 
 def self_ping():
     try:
-        response = requests.get(f"{os.getenv("APP_URL")}/ping")
+        response = requests.get(f"{os.getenv('APP_URL')}/ping")
         print(f"Self-ping status: {response.status_code}")
     except Exception as e:
         print(f"Self-ping failed: {str(e)}")
