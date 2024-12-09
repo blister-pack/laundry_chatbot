@@ -34,6 +34,14 @@ async def lifespan(app: FastAPI):
         replace_existing=True,
     )
 
+    scheduler.add_job(
+        func=self_ping,
+        trigger=IntervalTrigger(minutes=5),
+        id="self_ping",
+        name="Keeps app awake in Render's free tier",
+        replace_existing=True,
+    )
+
     scheduler.start()
 
     yield
@@ -126,9 +134,11 @@ def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
 print(all_third_fridays)
 
 
+# this is here to keep the app running on render's free tier
 @app.get("/ping")
 async def ping():
     return {"status": "alive", "message": "Chatbot is running"}
+
 
 def self_ping():
     try:
