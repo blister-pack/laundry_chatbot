@@ -26,14 +26,6 @@ async def lifespan(app: FastAPI):
         replace_existing=True,
     )
 
-    # scheduler.add_job(
-    #     func=message_dev,
-    #     trigger=IntervalTrigger(minutes=1),
-    #     id="message_ac",
-    #     name="Messages dev to make sure it's running correctly upon deployment :)",
-    #     replace_existing=True,
-    # )
-
     scheduler.add_job(
         func=self_ping,
         trigger=IntervalTrigger(minutes=5),
