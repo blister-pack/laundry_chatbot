@@ -59,14 +59,48 @@ def get_all_third_fridays(year_to_check=datetime.now().year):
 
 
 def is_right_week(
-    year_to_check=datetime.now().year,
-    month_to_check=datetime.now().month,
-    day_to_check=datetime.now().day,
+    year_to_check=None,
+    month_to_check=None,
+    day_to_check=None,
 ):
+    """
+    Determines if the given date falls within the same week as the third Friday of the month.
+
+    This function checks if the provided day is within the range of Monday to Friday
+    of the same week as the third Friday of the specified month. If no date is provided,
+    it defaults to the current date.
+
+    Parameters:
+    ----------
+    year_to_check : int, optional
+        The year to check (defaults to the current year).
+    month_to_check : int, optional
+        The month to check (defaults to the current month).
+    day_to_check : int, optional
+        The day to check (defaults to the current day).
+
+    Returns:
+    -------
+    bool
+        True if the given date is within Monday-Friday of the third Friday's week, False otherwise.
+
+    Notes:
+    ------
+    The default arguments are set to `None` and assigned inside the function to avoid caching issues.
+    If we had used `datetime.now().year` as a default argument directly, it would only be evaluated once
+    when the function is first loaded, rather than updating each time the function is called.
+    """
+    if year_to_check == None:
+        year_to_check = datetime.now().year
+    if month_to_check == None:
+        month_to_check = datetime.now().month
+    if day_to_check == None:
+        day_to_check = datetime.now().day
+
     # title because data is saved with a capitalized month
     # only need 2 last chars because it's the day (2024-02-16)
     # gotta turn it into an int so I can do math with it
-    third_friday_month = get_third_friday(year_to_check, month_to_check).split("-")[2]
+    third_friday_month = get_third_friday(year_to_check, month_to_check).day
 
     """if the difference between the now and the third friday of
     the month is 4 then it is monday of the same week, if it's 0
