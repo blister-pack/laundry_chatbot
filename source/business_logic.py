@@ -97,10 +97,7 @@ def is_right_week(
     if day_to_check == None:
         day_to_check = datetime.now().day
 
-    # title because data is saved with a capitalized month
-    # only need 2 last chars because it's the day (2024-02-16)
-    # gotta turn it into an int so I can do math with it
-    third_friday_month = get_third_friday(year_to_check, month_to_check).day
+    third_friday_month = get_third_friday(year_to_check, month_to_check).split("-")[2]
 
     """if the difference between the now and the third friday of
     the month is 4 then it is monday of the same week, if it's 0
