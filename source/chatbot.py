@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from source.business_logic import *
 import os
 import requests
-from messaging import message_start_service
+from messaging import message_start_service, message_everyone
 
 load_dotenv()
 scheduler = BackgroundScheduler()

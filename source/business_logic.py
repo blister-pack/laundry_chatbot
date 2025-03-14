@@ -28,10 +28,10 @@ month_mapping = {
 all_third_fridays = {"month": "day"}
 
 
-# this function returns what day of the week is today
-def today():
-    day_today = datetime.now().weekday()
-    return weekdays[day_today]
+def today(year=None, month=None, day=None):
+    if day == None:
+        day = datetime.now().weekday()
+    return weekdays[day]
 
 
 def tomorrow():
