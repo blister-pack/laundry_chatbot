@@ -2,6 +2,9 @@
 from business_logic import *
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ac_phone_number = os.getenv("AC_PHONE_NUMBER")
 ac_api_key = os.getenv("AC_API_KEY")
@@ -63,10 +66,6 @@ def message_everyone():
         for person in people_to_message:
             send_message(person, people_to_message[person])
 
-
-def message_everyone_test():
-    for person in people_to_message:
-        send_message(person, people_to_message[person])
 
 
 def message_dev(phone_number=ac_phone_number, api_key=ac_api_key):
