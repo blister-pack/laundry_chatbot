@@ -28,9 +28,8 @@ month_mapping = {
 all_third_fridays = {"month": "day"}
 
 
-def today(year=None, month=None, day=None):
-    if day == None:
-        day = datetime.now().weekday()
+def today():
+    day = datetime.now().weekday()
     return weekdays[day]
 
 

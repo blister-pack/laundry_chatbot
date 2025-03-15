@@ -1,5 +1,7 @@
+import datetime
 import pytest
 from source.business_logic import today
+import unittest.mock as mock
 
 
 @pytest.fixture
@@ -21,10 +23,16 @@ def year_to_check():
         (4, 21, "friday"),
     ],
 )
+@mock.patch("source.business_logic.datetime")
 def test_get_today(
+    mock_datetime,
     year_to_check,
     month_to_check,
     day_to_check,
     expected_result,
 ):
-    assert today(year_to_check, month_to_check, day_to_check) == expected_result
+    mock_datetime.now.return_value = datetime.datetime(
+        year_to_check, month_to_check, day_to_check
+    )
+
+    assert today() == expected_result
