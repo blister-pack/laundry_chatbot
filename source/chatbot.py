@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
+import asyncio
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from dotenv import load_dotenv
@@ -8,11 +10,10 @@ from source.business_logic import *
 import os
 import requests
 from messaging import message_start_service, message_everyone
-import asyncio
 import httpx
 
 load_dotenv()
-scheduler = BackgroundScheduler()
+scheduler = AsyncIOScheduler()
 
 APP_URL = os.getenv("APP_URL")
 if not APP_URL:
