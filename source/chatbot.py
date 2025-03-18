@@ -1,5 +1,4 @@
 from contextlib import asynccontextmanager
-from urllib import response
 from fastapi import FastAPI, Path
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
@@ -9,9 +8,24 @@ from source.business_logic import *
 import os
 import requests
 from messaging import message_start_service, message_everyone
+import asyncio
+import httpx
 
 load_dotenv()
 scheduler = BackgroundScheduler()
+
+APP_URL = os.getenv("APP_URL")
+if not APP_URL:
+    raise ValueError("APP_URL is not set in environment variables.")
+
+
+async def self_ping():
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(f"{APP_URL}/ping")
+            print(f"Self-ping status: {response.status_code}")
+        except Exception as e:
+            print(f"Self-ping failed: {str(e)}")
 
 
 @asynccontextmanager
@@ -44,15 +58,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
 # this is here to keep the app running on render's free tier
 @app.get("/ping")
 async def ping():
     return {"status": "alive", "message": "Chatbot is running"}
-
-
-def self_ping():
-    try:
-        response = requests.get(f"{os.getenv('APP_URL')}/ping")
-        print(f"Self-ping status: {response.status_code}")
-    except Exception as e:
-        print(f"Self-ping failed: {str(e)}")
